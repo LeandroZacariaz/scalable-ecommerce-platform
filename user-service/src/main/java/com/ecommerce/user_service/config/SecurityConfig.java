@@ -27,8 +27,11 @@ public class SecurityConfig {
          .authorizeHttpRequests(authRequest -> authRequest
                .requestMatchers(
                   "/auth/**",
-                  "/swagger-ui/**",  // Permitir acceso a Swagger UI
-                  "/v3/api-docs/**"   // Permitir acceso a la documentación OpenAPI
+              "/swagger-ui/**",
+              "/swagger-ui.html",
+              "/v3/api-docs/**",
+              "/swagger-resources/**",
+              "/webjars/**"   // Permitir acceso a la documentación OpenAPI
                ).permitAll()
                .anyRequest().authenticated()
          )

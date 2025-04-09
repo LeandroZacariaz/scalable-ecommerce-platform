@@ -21,12 +21,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-      http
-         .csrf(csrf -> csrf.disable())
-         .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/products/**").permitAll() // Acceso público
-                .anyRequest().authenticated()
-            );
+        http
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(HttpMethod.GET, "/product/").permitAll()
+                .requestMatchers(HttpMethod.GET, "/category/").permitAll()
+                .requestMatchers(HttpMethod.POST, "/product/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/product/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/product/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/category/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/category/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/category/**").hasRole("ADMIN")
+                .anyRequest().permitAll()
+            )
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

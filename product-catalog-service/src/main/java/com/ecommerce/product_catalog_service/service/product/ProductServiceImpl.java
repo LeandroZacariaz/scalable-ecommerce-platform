@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.ecommerce.product_catalog_service.domain.Product;
 import com.ecommerce.product_catalog_service.dto.product.ProductCreateDto;
 import com.ecommerce.product_catalog_service.dto.product.ProductDto;
+import com.ecommerce.product_catalog_service.exceptions.ResourceNotFoundException;
 import com.ecommerce.product_catalog_service.mappers.product.ProductMapper;
 import com.ecommerce.product_catalog_service.repository.CategoryRepository;
 import com.ecommerce.product_catalog_service.repository.ProductRepository;
@@ -23,7 +24,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto createProduct(ProductCreateDto productCreateDto) {
         Product productCreated=productMapper.productCreateDtoToProduct(productCreateDto);
-        productCreated.setCategory(categoryRepository.findByName(productCreateDto.name_category()).orElseThrow());
+        productCreated.setCategory(categoryRepository.findByName(productCreateDto.name_category()).orElseThrow(() 
+                -> new ResourceNotFoundException("La categoría con nombre: " + productCreateDto.name_category() + " no existe.")));
         return productMapper.productToProductDto(productRepository.save(productCreated));
     }
     @Override
@@ -34,7 +36,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto getProductById(Long id) {
         return productRepository.findById(id).map(productMapper::productToProductDto)
-                                .orElseThrow();
+                                .orElseThrow(() -> 
+                                new ResourceNotFoundException("El producto con ID: " + id + " no existe."));
     }
 
     @Override
@@ -44,7 +47,8 @@ public class ProductServiceImpl implements ProductService {
         productUpdate.setDescription(productUpdateDto.description());
         productUpdate.setPrice(productUpdateDto.price());
         productUpdate.setStock(productUpdateDto.stock());
-        productUpdate.setCategory(categoryRepository.findByName(productUpdateDto.name_category()).orElseThrow());
+        productUpdate.setCategory(categoryRepository.findByName(productUpdateDto.name_category()).orElseThrow(() 
+                    -> new ResourceNotFoundException("La categoría con nombre: " + productUpdateDto.name_category() + " no existe.")));
         return productMapper.productToProductDto(productRepository.save(productUpdate));
     }
 
@@ -53,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
         if (productRepository.existsById(id)) {
             productRepository.deleteById(id);
         }else{
-            
+            throw new ResourceNotFoundException("El producto con ID: " +id+" no existe." );
         }
     }
 

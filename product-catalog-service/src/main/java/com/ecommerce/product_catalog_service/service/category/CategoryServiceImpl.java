@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.ecommerce.product_catalog_service.domain.Category;
 import com.ecommerce.product_catalog_service.dto.category.CategoryCreateDto;
 import com.ecommerce.product_catalog_service.dto.category.CategoryDto;
+import com.ecommerce.product_catalog_service.exceptions.ResourceNotFoundException;
 import com.ecommerce.product_catalog_service.mappers.category.CategoryMapper;
 import com.ecommerce.product_catalog_service.repository.CategoryRepository;
 
@@ -27,7 +28,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto getCategoryById(Long id) {
-        return categoryMapper.categoryToCategoryDto(categoryRepository.findById(id).orElseThrow());
+        return categoryMapper.categoryToCategoryDto(categoryRepository.findById(id).orElseThrow(() 
+                    -> new ResourceNotFoundException("Categoría con ID: " + id + " no encontrada.")));
     }
 
     @Override
@@ -40,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryRepository.existsById(id)) {
             categoryRepository.deleteById(id);
         }else{
-
+            throw new ResourceNotFoundException("Categoría con ID: " +id+" no encontrada." );
         }
     }
 

@@ -33,17 +33,17 @@ public class UserServiceImpl implements UserService{
     public User getLoggingUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new UsernameNotFoundException("No authenticated user found.");
+            throw new UsernameNotFoundException("No se ha encontrado ningún usuario autenticado.");
             }
         String email = authentication.getName();
         return userRepository.findByEmail(email)
-                                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+                                .orElseThrow(() -> new UsernameNotFoundException("Usuario con email: " + email + " no encontrado."));
     }
 
     @Override
     public User getUserById(Long id_user) {
         return userRepository.findById(id_user)
-                  .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id_user));
+                  .orElseThrow(() -> new UsernameNotFoundException("Usuario con ID: " + id_user + " no encontrado."));
     }
 
     

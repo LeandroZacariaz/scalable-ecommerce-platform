@@ -39,7 +39,7 @@ public class JwtServiceImpl implements JwtService {
       try {
          return Jwts.builder().setClaims(extraClaims).setSubject(user.getUsername()).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + 86400000L)).signWith(getKey(), SignatureAlgorithm.HS256).compact();
       } catch (Exception var4) {
-         throw new JwtException("Error while creating the token: " + var4.getMessage());
+         throw new JwtException("Error mientras se creaba el token: " + var4.getMessage());
       }
     }
 
