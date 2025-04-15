@@ -55,4 +55,12 @@ public class CartItemController {
         cartItemService.deleteCartItem(idCartItem);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @Operation(summary = "Eliminar items por ID de producto", description = "Elimina todos los items del carrito que referencian un producto específico.")
+    @ApiResponse(responseCode = "204", description = "Items eliminados exitosamente")
+    @DeleteMapping("/by-product/{productId}")
+    public ResponseEntity<?> deleteCartItemsByProductId(@PathVariable("productId") Long productId) {
+        cartItemService.deleteCartItemsByProductId(productId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

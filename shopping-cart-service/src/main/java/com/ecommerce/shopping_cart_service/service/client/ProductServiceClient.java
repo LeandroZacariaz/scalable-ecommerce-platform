@@ -26,7 +26,7 @@ public class ProductServiceClient {
     }
 
     public boolean productExists(Long idProduct) {
-        String url = productServiceUrl + "/products/" + idProduct;
+        String url = productServiceUrl + "/product/" + idProduct;
         logger.info("Intentando validar producto en: {}", url);
 
         // Obtener el token JWT del contexto de seguridad

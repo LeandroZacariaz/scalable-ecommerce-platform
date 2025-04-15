@@ -24,6 +24,7 @@ public class SecurityConfig {
          .csrf(csrf -> csrf.disable())
          .authorizeHttpRequests(authRequest -> authRequest
             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+            .requestMatchers("/cartitem/by-product/**").permitAll()
             .anyRequest().authenticated()
          )
          .sessionManagement(sessionManager -> sessionManager

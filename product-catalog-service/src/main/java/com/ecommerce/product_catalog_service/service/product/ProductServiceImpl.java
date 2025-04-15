@@ -10,6 +10,7 @@ import com.ecommerce.product_catalog_service.exceptions.ResourceNotFoundExceptio
 import com.ecommerce.product_catalog_service.mappers.product.ProductMapper;
 import com.ecommerce.product_catalog_service.repository.CategoryRepository;
 import com.ecommerce.product_catalog_service.repository.ProductRepository;
+import com.ecommerce.product_catalog_service.service.client.CartItemServiceClient;
 
 import lombok.AllArgsConstructor;
 
@@ -20,6 +21,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductMapper productMapper;
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
+    private final CartItemServiceClient cartItemServiceClient;
 
     @Override
     public ProductDto createProduct(ProductCreateDto productCreateDto) {
@@ -55,6 +57,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(Long id) {
         if (productRepository.existsById(id)) {
+            cartItemServiceClient.deleteCartItemsByProductId(id);
             productRepository.deleteById(id);
         }else{
             throw new ResourceNotFoundException("El producto con ID: " +id+" no existe." );

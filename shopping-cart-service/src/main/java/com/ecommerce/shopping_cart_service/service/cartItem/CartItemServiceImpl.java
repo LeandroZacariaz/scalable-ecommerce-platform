@@ -18,6 +18,7 @@ import com.ecommerce.shopping_cart_service.repository.CartItemRepository;
 import com.ecommerce.shopping_cart_service.repository.CartRepository;
 import com.ecommerce.shopping_cart_service.service.client.ProductServiceClient;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -82,5 +83,11 @@ public class CartItemServiceImpl implements CartItemService{
     public CartItem getCartItem(Long idCartItem){
         return cartItemRepository.findById(idCartItem).orElseThrow(() -> 
                 new ResourceNotFoundException("CartItem con ID: " + idCartItem + " no encontrado."));
+    }
+
+    @Transactional
+    @Override
+    public void deleteCartItemsByProductId(Long productId) {
+        cartItemRepository.deleteByIdProduct(productId);
     }
 }
